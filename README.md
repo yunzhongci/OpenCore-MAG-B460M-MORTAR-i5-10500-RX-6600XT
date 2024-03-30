@@ -3,10 +3,8 @@
 
 ⚠️ 如果使用我的配置，请自行替换三码。
 
-## 更新
+### 更新
 - 2024/03/30，基于OpenCore 0.99，macOS Sonoma 14.4.1
-
-
 
 ### 硬件配置
 
@@ -41,6 +39,23 @@
 - OC -> CPU 特征 -> Intel VT-D 技术：禁止
 - OC -> CPU 特征 -> CFG锁定：禁止
   
+### Kext说明
+- Lilu.kext  # 基础必备，很多kext都依赖于它
+- VirtualSMC.kext  # 模拟白苹果的 SMC 芯片
+- SMCProcessor.kext  # VirtualSMC 的插件，用于监控 CPU 温度
+- SMCSuperIO.kext  # VirtualSMC 的插件，用于监控风扇的转速
+- NVMeFix.kext  # 用于修复非 Apple 苹果的 NVMe 上的电源管理和初始化
+- AppleALC.kext  # 声卡驱动
+- AMFIPass.kext  # 禁止AMFI，配合OCLP在Sonoma下修复博通网卡问题
+- IO80211FamilyLegacy.kext  # 配合OCLP在Sonoma下修复博通网卡问题
+- IOSkywalkFamily.kext  # 配合OCLP在Sonoma下修复博通网卡问题
+- LucyRTL8125Ethernet.kext  # Realtek 的 2.5Gb 的网卡驱动
+- RadeonSensor.kext  # 读取GPU温度所需，需要Lilu
+- SMCRadeonGPU.kext  # 可以选择用于将 GPU 温度导出到 VirtualSMC 以供监控工具读取
+- USBPorts.kext  # USB定制
+- WhateverGreen.kext  # 显卡驱动
+- XHCI-unsupported.kext  # 配合解决 USB 问题的驱动，常用语400以上主板
+
 ### 关于Mac序列号的问题
 - 下载 OpenCore Configurator for Mac，打开 PlatformInfo -> Model Lookup | Check Coverage 右侧选择 iMac20,1 机型（生成你的唯一硬件UUID），然后 Save as (另存为) config.plist
 - 在config.plist文件中找到如下代码，记录MLB、SystemSerialNumber和SystemUUID的值并记住它，更新EFI时，用你记录的值替换 /OC/config.plist 下对应的值即可
