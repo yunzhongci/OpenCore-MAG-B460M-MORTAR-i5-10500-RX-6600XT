@@ -680,7 +680,7 @@
 				<key>Strategy</key>
 				<string>Disable</string>
 			</dict>
-<dict>
+			<dict>
 				<key>Arch</key>
 				<string>Any</string>
 				<key>Comment</key>
@@ -1326,7 +1326,7 @@
 			<array>
 				<string>boot-args</string>
 				<string>ForceDisplayRotationInEFI</string>
-<string>csr-active-config</string>
+				<string>csr-active-config</string>
 			</array>
 		</dict>
 		<key>LegacyOverwrite</key>
@@ -1551,7 +1551,7 @@
 				<key>Path</key>
 				<string>ResetNvramEntry.efi</string>
 			</dict>
-					</array>
+		</array>
 		<key>Input</key>
 		<dict>
 			<key>KeyFiltering</key>
