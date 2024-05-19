@@ -4,7 +4,9 @@
 ⚠️ 如果使用我的配置，请自行替换三码。
 
 ### 更新
-- 2024/03/30，基于OpenCore 1.0.0，macOS Sonoma 14.4.1
+- 2024/03/30，基于OpenCore 0.9.0，macOS Sonoma 14.4.1
+- 2024/05/14，基于OpenCore 1.0.0，macOS Sonoma 14.5
+
 
 ### 硬件配置
 
