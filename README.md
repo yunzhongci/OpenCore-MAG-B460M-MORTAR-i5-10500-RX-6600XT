@@ -1,11 +1,12 @@
-# OpenCore-MAG-B460M-MORTAR-i5-10500-RX-580
-微星B460M 迫击炮 ，i5-10400，RX 580 4G 完美黑苹果。
+# OpenCore-MAG-B460M-MORTAR-i5-10500-RX-5700XT
+微星B460M 迫击炮 ，i5-10400，蓝宝石RX 5700XT 8G 完美黑苹果。
 
 ⚠️ 如果使用我的配置，请自行替换三码。
 
 ### 更新
 - 2024/03/30，基于OpenCore 0.9.0，macOS Sonoma 14.4.1
 - 2024/05/14，基于OpenCore 1.0.0，macOS Sonoma 14.5
+- 2024/09/09，更换显卡为蓝宝石RX 5700XT 8G白金版。之前的显卡RX580 4G的配置文件归档，不再更新
 
 
 ### 硬件配置
@@ -17,7 +18,7 @@
 |  内存|  16G x4 |
 |  板载网卡|  RTL8125B|
 |  网卡+蓝牙|  博通943602CS|
-|  显卡|  核显UHD630+RX 580|
+|  显卡|  核显UHD630+RX 5700XT|
 
 ### Works
 - 睡眠
@@ -40,6 +41,124 @@
 - OC -> CPU 特征 -> Intel 虚拟化技术：允许
 - OC -> CPU 特征 -> Intel VT-D 技术：禁止
 - OC -> CPU 特征 -> CFG锁定：禁止
+
+### 使用的SSDT
+
+- SSDT-AWAC
+- SSDT-EC-USBX-DESKTOP
+- SSDT-GPRW
+- SSDT-MSI-B460M-Devices
+- SSDT-PLUG
+- SSDT-PM
+- SSDT-RX5700XT
+- SSDT-SBUS
+SSDT-RX5700XT是一个实验性的自定义 SSDT，用于增强AMD RX 5700 XT显卡的性能
+
+### DeviceProperties
+#### PciRoot(0x0)/Pci(0x2,0x0)
+Intel UHD Graphics 630 
+
+| **Key**                  | **Type** |   **Value**  |
+|--------------------------|:--------:|:------------:|
+| AAPL,ig-platform-id      |   Data   | ``07009B3E`` |
+| device-id                |   Data   | ``9B3E0000`` |
+| enable-metal             |   Data   | ``01000000`` |
+| disable-agdc             	|   Data   	|        ``01000000``       	|
+| enable-hdmi-dividers-fix 	|   Data   	|        ``01000000``       	|
+| enable-hdmi20            	|   Data   	|        ``01000000``       	|
+| framebuffer-con0-busid  	|   Data   	|        ``02000000``       	|
+| framebuffer-con0-enable    	|   Data   	|        ``01000000``       	|
+| framebuffer-con0-flags  	|   Data   	|        ``C7030000``       	|
+| framebuffer-con0-index    	|   Data   	|        ``02000000``       	|
+| framebuffer-con0-pipe  	|   Data   	|        ``0A000000``       	|
+| framebuffer-con0-type    	|   Data   	|        ``00080000``       	|
+| framebuffer-con1-busid  	|   Data   	|        ``04000000``       	|
+| framebuffer-con1-enable    	|   Data   	|        ``01000000``       	|
+| framebuffer-con1-flags  	|   Data   	|        ``C7030000``       	|
+| framebuffer-con1-index    	|   Data   	|        ``03000000``       	|
+| framebuffer-con1-pipe  	|   Data   	|        ``08000000``       	|
+| framebuffer-con1-type    	|   Data   	|        ``00080000``       	|
+| framebuffer-con2-busid  	|   Data   	|        ``01000000``       	|
+| framebuffer-con2-enable    	|   Data   	|        ``01000000``       	|
+| framebuffer-con2-flags  	|   Data   	|        ``C7030000``       	|
+| framebuffer-con2-index    	|   Data   	|        ``01000000``       	|
+| framebuffer-con2-pipe  	|   Data   	|        ``09000000``       	|
+| framebuffer-con2-type    	|   Data   	|        ``00080000``       	|
+| framebuffer-patch-enable 	|   Data   	|        ``01000000``       	|
+| framebuffer-stolenmem    	|   Data   	|        ``00003001``       	|
+| rps-control              	|   Data   	|        ``01000000``       	|
+| hda-gfx                 	|   String   	|        ``onboard-1``       	|
+| model                   	|   String   	|        ``Intel UHD Graphics 630``       	|
+| igfxfw                   |   Data   | ``02000000`` |
+
+想将上述条目复制并粘贴为.plist数据
+
+```xml
+<key>PciRoot(0x0)/Pci(0x2,0x0)</key>
+<dict>
+	<key>AAPL,ig-platform-id</key>
+	<data>BwCbPg==</data>
+	<key>device-id</key>
+	<data>mz4AAA==</data>
+	<key>disable-agdc</key>
+	<data>AQAAAA==</data>
+	<key>enable-hdmi-dividers-fix</key>
+	<data>AQAAAA==</data>
+	<key>enable-hdmi20</key>
+	<data>AQAAAA==</data>
+	<key>enable-metal</key>
+	<data>AQAAAA==</data>
+	<key>framebuffer-con0-busid</key>
+	<data>AgAAAA==</data>
+	<key>framebuffer-con0-enable</key>
+	<data>AQAAAA==</data>
+	<key>framebuffer-con0-flags</key>
+	<data>xwMAAA==</data>
+	<key>framebuffer-con0-index</key>
+	<data>AgAAAA==</data>
+	<key>framebuffer-con0-pipe</key>
+	<data>CgAAAA==</data>
+	<key>framebuffer-con0-type</key>
+	<data>AAgAAA==</data>
+	<key>framebuffer-con1-busid</key>
+	<data>BAAAAA==</data>
+	<key>framebuffer-con1-enable</key>
+	<data>AQAAAA==</data>
+	<key>framebuffer-con1-flags</key>
+	<data>xwMAAA==</data>
+	<key>framebuffer-con1-index</key>
+	<data>AwAAAA==</data>
+	<key>framebuffer-con1-pipe</key>
+	<data>CAAAAA==</data>
+	<key>framebuffer-con1-type</key>
+	<data>AAgAAA==</data>
+	<key>framebuffer-con2-busid</key>
+	<data>AQAAAA==</data>
+	<key>framebuffer-con2-enable</key>
+	<data>AQAAAA==</data>
+	<key>framebuffer-con2-flags</key>
+	<data>xwMAAA==</data>
+	<key>framebuffer-con2-index</key>
+	<data>AQAAAA==</data>
+	<key>framebuffer-con2-pipe</key>
+	<data>CQAAAA==</data>
+	<key>framebuffer-con2-type</key>
+	<data>AAgAAA==</data>
+	<key>framebuffer-patch-enable</key>
+	<data>AQAAAA==</data>
+	<key>framebuffer-stolenmem</key>
+	<data>AAAwAQ==</data>
+	<key>hda-gfx</key>
+	<string>onboard-1</string>
+	<key>igfxfw</key>
+	<data>AgAAAA==</data>
+	<key>model</key>
+	<string>Intel UHD Graphics 630</string>
+	<key>rps-control</key>
+	<data>AQAAAA==</data>
+</dict>
+```
+
   
 ### Kext说明
 - Lilu.kext  # 基础必备，很多kext都依赖于它
@@ -89,6 +208,7 @@ PS: 还可使用 Hackintool 工具（系统 -> 序列号生成器）来获取三
     </dict>
 
 ```
+这部分内容引用自 [Coopydood/OpenCore-Z490E-CometLakeh](https://github.com/Coopydood/OpenCore-Z490E-CometLake) 2024 年 8 月 25 日起更新的，用于修复 HDMI 输出。请添加这些新条目以启用 HDMI！
 
 ### 声卡ID
 
