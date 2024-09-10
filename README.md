@@ -7,6 +7,7 @@
 - 2024/03/30，基于OpenCore 0.9.0，macOS Sonoma 14.4.1
 - 2024/05/14，基于OpenCore 1.0.0，macOS Sonoma 14.5
 - 2024/09/09，更换显卡为蓝宝石RX 5700XT 8G白金版。之前的显卡RX580 4G的配置文件归档，不再更新
+- 2024/09/10，为了测试macOS Sequoia， 更新Lilu.kext ANFIPass.kext IOSkywalkFamily.kext。添加启动参数 -lilubetaall 
 
 
 ### 硬件配置
@@ -33,14 +34,21 @@
 暂无
 
 ### BIOS 设置
-- 安全启动：关闭
-- USB设备从S3/S4/S5唤醒：允许
-- PS/2鼠标从S3/S4/S5唤醒：允许
-- USB键盘从S3/S4/S5唤醒：任意键
-- 集成显卡多显示器：允许（否则核显硬件解码失效，只使用核显的可以忽略）
+- Settings -> 安全 -> 安全引导 -> 安全启动：关闭
+- Settings -> 唤醒设置 -> USB设备从S3/S4/S5唤醒：允许
+- Settings -> 唤醒设置 -> PS/2鼠标从S3/S4/S5唤醒：允许
+- Settings -> 唤醒设置 -> USB键盘从S3/S4/S5唤醒：任意键
+- Settings -> 高级 -> 内建显示器配置 -> 集成显卡多显示器：允许（否则核显硬件解码失效，只使用核显的可以忽略）
+- Settings -> 高级 -> PCIe -> PCI子系统设置 -> Re-Size BAR Support ：禁止
 - OC -> CPU 特征 -> Intel 虚拟化技术：允许
 - OC -> CPU 特征 -> Intel VT-D 技术：禁止
 - OC -> CPU 特征 -> CFG锁定：禁止
+
+启动的时候卡：
+```
+IOPCIConfigurator::configure kIOPCIEnumerationWaitTime is 900
+```
+通过在 BIOS 中禁用 Resizable Bar 确实可以解决 macOS 的启动问题，同时你也正确地在 config.plist 中添加了 agdpmod=pikera 来确保显卡兼容性
 
 ### 使用的SSDT
 
@@ -57,108 +65,118 @@ SSDT-RX5700XT是一个实验性的自定义 SSDT，用于增强AMD RX 5700 XT显
 ### DeviceProperties
 #### PciRoot(0x0)/Pci(0x2,0x0)
 Intel UHD Graphics 630 
-
-| **Key**                  | **Type** |   **Value**  |
-|--------------------------|:--------:|:------------:|
-| AAPL,ig-platform-id      |   Data   | ``07009B3E`` |
-| device-id                |   Data   | ``9B3E0000`` |
-| enable-metal             |   Data   | ``01000000`` |
-| disable-agdc             	|   Data   	|        ``01000000``       	|
-| enable-hdmi-dividers-fix 	|   Data   	|        ``01000000``       	|
-| enable-hdmi20            	|   Data   	|        ``01000000``       	|
-| framebuffer-con0-busid  	|   Data   	|        ``02000000``       	|
-| framebuffer-con0-enable    	|   Data   	|        ``01000000``       	|
-| framebuffer-con0-flags  	|   Data   	|        ``C7030000``       	|
-| framebuffer-con0-index    	|   Data   	|        ``02000000``       	|
-| framebuffer-con0-pipe  	|   Data   	|        ``0A000000``       	|
-| framebuffer-con0-type    	|   Data   	|        ``00080000``       	|
-| framebuffer-con1-busid  	|   Data   	|        ``04000000``       	|
-| framebuffer-con1-enable    	|   Data   	|        ``01000000``       	|
-| framebuffer-con1-flags  	|   Data   	|        ``C7030000``       	|
-| framebuffer-con1-index    	|   Data   	|        ``03000000``       	|
-| framebuffer-con1-pipe  	|   Data   	|        ``08000000``       	|
-| framebuffer-con1-type    	|   Data   	|        ``00080000``       	|
-| framebuffer-con2-busid  	|   Data   	|        ``01000000``       	|
-| framebuffer-con2-enable    	|   Data   	|        ``01000000``       	|
-| framebuffer-con2-flags  	|   Data   	|        ``C7030000``       	|
-| framebuffer-con2-index    	|   Data   	|        ``01000000``       	|
-| framebuffer-con2-pipe  	|   Data   	|        ``09000000``       	|
-| framebuffer-con2-type    	|   Data   	|        ``00080000``       	|
-| framebuffer-patch-enable 	|   Data   	|        ``01000000``       	|
-| framebuffer-stolenmem    	|   Data   	|        ``00003001``       	|
-| rps-control              	|   Data   	|        ``01000000``       	|
-| hda-gfx                 	|   String   	|        ``onboard-1``       	|
-| model                   	|   String   	|        ``Intel UHD Graphics 630``       	|
-| igfxfw                   |   Data   | ``02000000`` |
-
-想将上述条目复制并粘贴为.plist数据
-
 ```xml
-<key>PciRoot(0x0)/Pci(0x2,0x0)</key>
 <dict>
-	<key>AAPL,ig-platform-id</key>
-	<data>BwCbPg==</data>
-	<key>device-id</key>
-	<data>mz4AAA==</data>
-	<key>disable-agdc</key>
-	<data>AQAAAA==</data>
-	<key>enable-hdmi-dividers-fix</key>
-	<data>AQAAAA==</data>
-	<key>enable-hdmi20</key>
-	<data>AQAAAA==</data>
-	<key>enable-metal</key>
-	<data>AQAAAA==</data>
-	<key>framebuffer-con0-busid</key>
-	<data>AgAAAA==</data>
-	<key>framebuffer-con0-enable</key>
-	<data>AQAAAA==</data>
-	<key>framebuffer-con0-flags</key>
-	<data>xwMAAA==</data>
-	<key>framebuffer-con0-index</key>
-	<data>AgAAAA==</data>
-	<key>framebuffer-con0-pipe</key>
-	<data>CgAAAA==</data>
-	<key>framebuffer-con0-type</key>
-	<data>AAgAAA==</data>
-	<key>framebuffer-con1-busid</key>
-	<data>BAAAAA==</data>
-	<key>framebuffer-con1-enable</key>
-	<data>AQAAAA==</data>
-	<key>framebuffer-con1-flags</key>
-	<data>xwMAAA==</data>
-	<key>framebuffer-con1-index</key>
-	<data>AwAAAA==</data>
-	<key>framebuffer-con1-pipe</key>
-	<data>CAAAAA==</data>
-	<key>framebuffer-con1-type</key>
-	<data>AAgAAA==</data>
-	<key>framebuffer-con2-busid</key>
-	<data>AQAAAA==</data>
-	<key>framebuffer-con2-enable</key>
-	<data>AQAAAA==</data>
-	<key>framebuffer-con2-flags</key>
-	<data>xwMAAA==</data>
-	<key>framebuffer-con2-index</key>
-	<data>AQAAAA==</data>
-	<key>framebuffer-con2-pipe</key>
-	<data>CQAAAA==</data>
-	<key>framebuffer-con2-type</key>
-	<data>AAgAAA==</data>
-	<key>framebuffer-patch-enable</key>
-	<data>AQAAAA==</data>
-	<key>framebuffer-stolenmem</key>
-	<data>AAAwAQ==</data>
-	<key>hda-gfx</key>
-	<string>onboard-1</string>
-	<key>igfxfw</key>
-	<data>AgAAAA==</data>
-	<key>model</key>
-	<string>Intel UHD Graphics 630</string>
-	<key>rps-control</key>
-	<data>AQAAAA==</data>
-</dict>
+				<key>AAPL,ig-platform-id</key>
+				<data>BwCbPg==</data>
+				<key>device-id</key>
+				<data>mz4AAA==</data>
+				<key>framebuffer-patch-enable</key>
+				<data>AQAAAA==</data>
+				<key>framebuffer-stolenmem</key>
+				<data>AAAwAQ==</data>
+			</dict>
 ```
 
+RX 5700XT 独显优化
+使用 Hackintool 获取具体的设备路径，替换下面的路径：PciRoot(0x0)/Pci(0x1,0x0)/Pci(0x0,0x0)/Pci(0x0,0x0)/Pci(0x0,0x0)
+```xml
+			<key>PciRoot(0x0)/Pci(0x1,0x0)/Pci(0x0,0x0)/Pci(0x0,0x0)/Pci(0x0,0x0)</key>
+			<dict>
+				<key>@0,name</key>
+				<string>ATY,Adder</string>
+				<key>@1,name</key>
+				<string>ATY,Adder</string>
+				<key>@2,name</key>
+				<string>ATY,Adder</string>
+				<key>@3,name</key>
+				<string>ATY,Adder</string>
+				<key>AAPL00,DualLink</key>
+				<data>AQAAAA==</data>
+				<key>ATY,Card#</key>
+				<string>102-D32200-00</string>
+				<key>ATY,Copyright</key>
+				<string>Copyright AMD Inc. All Rights Reserved. 2005-2019</string>
+				<key>ATY,DeviceName</key>
+				<string>W5700X</string>
+				<key>ATY,EFIVersion</key>
+				<string>01.01.190</string>
+				<key>ATY,FamilyName</key>
+				<string>Radeon Pro</string>
+				<key>ATY,Rom#</key>
+				<string>113-D3220E-190</string>
+				<key>CAIL_EnableLBPWSupport</key>
+				<integer>0</integer>
+				<key>CAIL_EnableMaxPlayloadSizeSync</key>
+				<integer>1</integer>
+				<key>CFG_CAA</key>
+				<integer>0</integer>
+				<key>CFG_FB_LIMIT</key>
+				<integer>0</integer>
+				<key>CFG_FORCE_MAX_DPS</key>
+				<integer>1</integer>
+				<key>CFG_GEN_FLAGS</key>
+				<integer>0</integer>
+				<key>CFG_NO_MST</key>
+				<integer>0</integer>
+				<key>CFG_NVV</key>
+				<integer>2</integer>
+				<key>CFG_PAA</key>
+				<integer>0</integer>
+				<key>CFG_PULSE_INT</key>
+				<integer>1</integer>
+				<key>CFG_TPS1S</key>
+				<integer>1</integer>
+				<key>CFG_TRANS_WSRV</key>
+				<integer>1</integer>
+				<key>CFG_UFL_CHK</key>
+				<integer>0</integer>
+				<key>CFG_UFL_STP</key>
+				<integer>0</integer>
+				<key>CFG_USE_AGDC</key>
+				<integer>1</integer>
+				<key>CFG_USE_CP2</key>
+				<integer>1</integer>
+				<key>CFG_USE_CPSTATUS</key>
+				<integer>1</integer>
+				<key>CFG_USE_DPT</key>
+				<integer>1</integer>
+				<key>CFG_USE_FBC</key>
+				<integer>0</integer>
+				<key>CFG_USE_FBWRKLP</key>
+				<integer>1</integer>
+				<key>CFG_USE_FEDS</key>
+				<integer>1</integer>
+				<key>CFG_USE_LPT</key>
+				<integer>1</integer>
+				<key>CFG_USE_PSR</key>
+				<integer>0</integer>
+				<key>CFG_USE_SCANOUT</key>
+				<integer>1</integer>
+				<key>CFG_USE_SRRB</key>
+				<integer>0</integer>
+				<key>CFG_USE_STUTTER</key>
+				<integer>1</integer>
+				<key>CFG_USE_TCON</key>
+				<integer>1</integer>
+				<key>PP_DisableDIDT</key>
+				<integer>1</integer>
+				<key>PP_DisablePowerContainment</key>
+				<integer>1</integer>
+				<key>PP_DisableVoltageIsland</key>
+				<integer>0</integer>
+				<key>PP_FuzzyFanControl</key>
+				<integer>1</integer>
+				<key>device_type</key>
+				<string>ATY,AdderParent</string>
+				<key>hda-gfx</key>
+				<string>onboard-1</string>
+				<key>model</key>
+				<string>Radeon Pro W5700X</string>
+				<key>name</key>
+				<string>ATY_GPU</string>
+			</dict>
+```
   
 ### Kext说明
 - Lilu.kext  # 基础必备，很多kext都依赖于它
