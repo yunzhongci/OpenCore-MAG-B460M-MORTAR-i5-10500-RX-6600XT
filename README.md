@@ -193,7 +193,7 @@ RX 5700XT 独显优化
 - SMCRadeonGPU.kext  # 可以选择用于将 GPU 温度导出到 VirtualSMC 以供监控工具读取
 - USBPorts.kext  # USB定制
 - WhateverGreen.kext  # 显卡驱动
-- XHCI-unsupported.kext  # 配合解决 USB 问题的驱动，常用语400以上主板
+- XHCI-unsupported.kext  # 配合解决 USB 问题的驱动，常用于400以上主板
 
 ### 关于Mac序列号的问题
 - 下载 OpenCore Configurator for Mac，打开 PlatformInfo -> Model Lookup | Check Coverage 右侧选择 iMac20,1 机型（生成你的唯一硬件UUID），然后 Save as (另存为) config.plist
@@ -226,7 +226,7 @@ PS: 还可使用 Hackintool 工具（系统 -> 序列号生成器）来获取三
     </dict>
 
 ```
-这部分内容引用自 [Coopydood/OpenCore-Z490E-CometLakeh](https://github.com/Coopydood/OpenCore-Z490E-CometLake) 2024 年 8 月 25 日起更新的，用于修复 HDMI 输出。请添加这些新条目以启用 HDMI！
+
 
 ### 声卡ID
 
