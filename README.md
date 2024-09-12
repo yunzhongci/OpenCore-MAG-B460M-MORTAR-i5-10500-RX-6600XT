@@ -19,7 +19,7 @@
 |  内存|  16G x4 |
 |  板载网卡|  RTL8125B|
 |  网卡+蓝牙|  博通943602CS|
-|  显卡|  核显UHD630+RX 5700XT|
+|  显卡|  核显UHD630+蓝宝石 RX 5700XT|
 
 ### Works
 - 睡眠
@@ -58,9 +58,26 @@ IOPCIConfigurator::configure kIOPCIEnumerationWaitTime is 900
 - SSDT-MSI-B460M-Devices
 - SSDT-PLUG
 - SSDT-PM
-- SSDT-RX5700XT
+- SSDT-RX5700XT-Version1.0
 - SSDT-SBUS
-SSDT-RX5700XT是一个实验性的自定义 SSDT，用于增强AMD RX 5700 XT显卡的性能
+  
+#### 说明
+SSDT-AWAC、SSDT-PLUG、SSDT-EC-USBX-DESKTOP这三个为推荐添加的
+
+
+SSDT-RX5700XT-Version1.0.aml优化 RX 5700XT 独显显示，配合dAGPM.kext一起。
+
+
+SSDT-GPRW修复睡眠即醒或者休眠问题，遇到问题可以添加
+
+
+SSDT-MSI-B460M-Devices，运行稳定且没有遇到以上问题，你可能不需要这个 SSDT 文件。但如果遇到设备识别、音频、USB、睡眠等问题可以添加
+
+
+SSDT-SBUS当主板的 SMBus 存在兼容性问题时，特别是某些电源管理相关的设备无法正确工作时添加
+
+
+SSDT-PM，加载节能第五项（断电后自动重启生效，PC基本通用的补丁）
 
 ### DeviceProperties
 #### PciRoot(0x0)/Pci(0x2,0x0)
@@ -78,7 +95,10 @@ Intel UHD Graphics 630
 			</dict>
 ```
 
-RX 5700XT 独显优化
+
+#### RX 5700XT 独显优化
+⚠️ 使用了SSDT-RX5700XT-Version1.0 可以不用这部分，两者二选一
+
 使用 Hackintool 获取具体的设备路径，替换下面的路径：PciRoot(0x0)/Pci(0x1,0x0)/Pci(0x0,0x0)/Pci(0x0,0x0)/Pci(0x0,0x0)
 ```xml
 			<key>PciRoot(0x0)/Pci(0x1,0x0)/Pci(0x0,0x0)/Pci(0x0,0x0)/Pci(0x0,0x0)</key>
@@ -194,6 +214,7 @@ RX 5700XT 独显优化
 - USBPorts.kext  # USB定制
 - WhateverGreen.kext  # 显卡驱动
 - XHCI-unsupported.kext  # 配合解决 USB 问题的驱动，常用于400以上主板
+- dAGPM.kext # 配合SSDT-RX5700XT-Version1.0.aml优化 RX 5700XT 独显
 
 ### 关于Mac序列号的问题
 - 下载 OpenCore Configurator for Mac，打开 PlatformInfo -> Model Lookup | Check Coverage 右侧选择 iMac20,1 机型（生成你的唯一硬件UUID），然后 Save as (另存为) config.plist
