@@ -1,13 +1,11 @@
 # OpenCore-MAG-B460M-MORTAR-i5-10500-RX-5700XT
-微星B460M 迫击炮 ，i5-10400，蓝宝石RX 5700XT 8G 完美黑苹果。
+微星B460M 迫击炮 ，i5-10400，迪兰恒进RX 6600XT 8G 完美黑苹果。
 
-⚠️ 如果使用我的配置，请自行替换三码。
+⚠️** 如果使用我的配置，请自行替换三码。**
 
 ### 更新
-- 2024/03/30，基于OpenCore 0.9.0，macOS Sonoma 14.4.1
-- 2024/05/14，基于OpenCore 1.0.0，macOS Sonoma 14.5
-- 2024/09/09，更换显卡为蓝宝石RX 5700XT 8G白金版。之前的显卡RX580 4G的配置文件归档，不再更新
-- 2024/09/10，为了测试macOS Sequoia， 更新Lilu.kext ANFIPass.kext IOSkywalkFamily.kext。添加启动参数 -lilubetaall 
+- 2024/09/15，基于OpenCore 1.0.1，macOS Sonoma 14.4.6
+- 2024/09/15，为了测试macOS Sequoia， 更新Lilu.kext ANFIPass.kext IOSkywalkFamily.kext。添加启动参数 -lilubetaall 
 
 
 ### 硬件配置
@@ -19,7 +17,7 @@
 |  内存|  16G x4 |
 |  板载网卡|  RTL8125B|
 |  网卡+蓝牙|  博通943602CS|
-|  显卡|  核显UHD630+蓝宝石 RX 5700XT|
+|  显卡|  核显UHD630+迪兰恒进 RX 6600XT |
 
 ### Works
 - 睡眠
@@ -51,152 +49,93 @@ IOPCIConfigurator::configure kIOPCIEnumerationWaitTime is 900
 通过在 BIOS 中禁用 Resizable Bar 确实可以解决 macOS 的启动问题，同时你也正确地在 config.plist 中添加了 agdpmod=pikera 来确保显卡兼容性
 
 ### 使用的SSDT
-
 - SSDT-AWAC
 - SSDT-EC-USBX-DESKTOP
 - SSDT-GPRW
 - SSDT-MSI-B460M-Devices
 - SSDT-PLUG
 - SSDT-PM
-- SSDT-RX5700XT-Version1.0
 - SSDT-SBUS
   
 #### 说明
 SSDT-AWAC、SSDT-PLUG、SSDT-EC-USBX-DESKTOP这三个为推荐添加的
 
-
-SSDT-RX5700XT-Version1.0.aml优化 RX 5700XT 独显显示，配合dAGPM.kext一起。
-
-
 SSDT-GPRW修复睡眠即醒或者休眠问题，遇到问题可以添加
-
 
 SSDT-MSI-B460M-Devices，运行稳定且没有遇到以上问题，你可能不需要这个 SSDT 文件。但如果遇到设备识别、音频、USB、睡眠等问题可以添加
 
-
 SSDT-SBUS当主板的 SMBus 存在兼容性问题时，特别是某些电源管理相关的设备无法正确工作时添加
-
 
 SSDT-PM，加载节能第五项（断电后自动重启生效，PC基本通用的补丁）
 
 ### DeviceProperties
-#### PciRoot(0x0)/Pci(0x2,0x0)
-Intel UHD Graphics 630 
+#### PciRoot(0x0)/Pci(0x1F,0x3)
+主板自带声卡为ALCS1200A,声卡ID可选为：1、2、3、7、49、50、51、52、69
+
+我这里用的是1
+
 ```xml
-<dict>
+			<key>PciRoot(0x0)/Pci(0x1F,0x3)</key>
+			<dict>
+				<key>layout-id</key>
+				<data>AQAAAA==</data>
+			</dict>
+```
+#### PciRoot(0x0)/Pci(0x2,0x0)
+核显 Intel UHD Graphics 630
+不填写可能会导致VideoProc 中现实HEVC不支持。 
+```xml
+<key>PciRoot(0x0)/Pci(0x2,0x0)</key>
+			<dict>
 				<key>AAPL,ig-platform-id</key>
-				<data>BwCbPg==</data>
+				<data>AwDImw==</data>
+				<key>AAPL,slot-name</key>
+				<string>Internal@0,2,0</string>
 				<key>device-id</key>
 				<data>mz4AAA==</data>
-				<key>framebuffer-patch-enable</key>
-				<data>AQAAAA==</data>
-				<key>framebuffer-stolenmem</key>
-				<data>AAAwAQ==</data>
+				<key>device_type</key>
+				<string>VGA compatible controller</string>
+				<key>model</key>
+				<string>Intel UHD Graphics 630</string>
 			</dict>
 ```
 
-
-#### RX 5700XT 独显优化
-⚠️ 使用了SSDT-RX5700XT-Version1.0 可以不用这部分，两者二选一
+#### RX 6600XT 独显优化
 
 使用 Hackintool 获取具体的设备路径，替换下面的路径：PciRoot(0x0)/Pci(0x1,0x0)/Pci(0x0,0x0)/Pci(0x0,0x0)/Pci(0x0,0x0)
 ```xml
 			<key>PciRoot(0x0)/Pci(0x1,0x0)/Pci(0x0,0x0)/Pci(0x0,0x0)/Pci(0x0,0x0)</key>
 			<dict>
 				<key>@0,name</key>
-				<string>ATY,Adder</string>
+				<string>ATY,Henbury</string>
 				<key>@1,name</key>
-				<string>ATY,Adder</string>
+				<string>ATY,Henbury</string>
 				<key>@2,name</key>
-				<string>ATY,Adder</string>
+				<string>ATY,Henbury</string>
 				<key>@3,name</key>
-				<string>ATY,Adder</string>
-				<key>AAPL00,DualLink</key>
-				<data>AQAAAA==</data>
-				<key>ATY,Card#</key>
-				<string>102-D32200-00</string>
-				<key>ATY,Copyright</key>
-				<string>Copyright AMD Inc. All Rights Reserved. 2005-2019</string>
+				<string>ATY,Henbury</string>
+				<key>AAPL,slot-name</key>
+				<string>Slot-1</string>
 				<key>ATY,DeviceName</key>
-				<string>W5700X</string>
+				<string>W6600X</string>
 				<key>ATY,EFIVersion</key>
-				<string>01.01.190</string>
+				<string>01.01.270</string>
 				<key>ATY,FamilyName</key>
 				<string>Radeon Pro</string>
-				<key>ATY,Rom#</key>
-				<string>113-D3220E-190</string>
-				<key>CAIL_EnableLBPWSupport</key>
-				<integer>0</integer>
-				<key>CAIL_EnableMaxPlayloadSizeSync</key>
-				<integer>1</integer>
-				<key>CFG_CAA</key>
-				<integer>0</integer>
-				<key>CFG_FB_LIMIT</key>
-				<integer>0</integer>
-				<key>CFG_FORCE_MAX_DPS</key>
-				<integer>1</integer>
-				<key>CFG_GEN_FLAGS</key>
-				<integer>0</integer>
-				<key>CFG_NO_MST</key>
-				<integer>0</integer>
-				<key>CFG_NVV</key>
-				<integer>2</integer>
-				<key>CFG_PAA</key>
-				<integer>0</integer>
-				<key>CFG_PULSE_INT</key>
-				<integer>1</integer>
-				<key>CFG_TPS1S</key>
-				<integer>1</integer>
-				<key>CFG_TRANS_WSRV</key>
-				<integer>1</integer>
-				<key>CFG_UFL_CHK</key>
-				<integer>0</integer>
-				<key>CFG_UFL_STP</key>
-				<integer>0</integer>
-				<key>CFG_USE_AGDC</key>
-				<integer>1</integer>
-				<key>CFG_USE_CP2</key>
-				<integer>1</integer>
-				<key>CFG_USE_CPSTATUS</key>
-				<integer>1</integer>
-				<key>CFG_USE_DPT</key>
-				<integer>1</integer>
-				<key>CFG_USE_FBC</key>
-				<integer>0</integer>
-				<key>CFG_USE_FBWRKLP</key>
-				<integer>1</integer>
-				<key>CFG_USE_FEDS</key>
-				<integer>1</integer>
-				<key>CFG_USE_LPT</key>
-				<integer>1</integer>
-				<key>CFG_USE_PSR</key>
-				<integer>0</integer>
-				<key>CFG_USE_SCANOUT</key>
-				<integer>1</integer>
-				<key>CFG_USE_SRRB</key>
-				<integer>0</integer>
-				<key>CFG_USE_STUTTER</key>
-				<integer>1</integer>
-				<key>CFG_USE_TCON</key>
-				<integer>1</integer>
-				<key>PP_DisableDIDT</key>
-				<integer>1</integer>
-				<key>PP_DisablePowerContainment</key>
-				<integer>1</integer>
-				<key>PP_DisableVoltageIsland</key>
-				<integer>0</integer>
-				<key>PP_FuzzyFanControl</key>
+				<key>CFG_LINK_FIXED_MAP</key>
 				<integer>1</integer>
 				<key>device_type</key>
-				<string>ATY,AdderParent</string>
-				<key>hda-gfx</key>
-				<string>onboard-1</string>
+				<string>ATY,HenburyParent</string>
 				<key>model</key>
-				<string>Radeon Pro W5700X</string>
+				<string>AMD Radeon RRO W6600X</string>
 				<key>name</key>
-				<string>ATY_GPU</string>
+				<string>ATY,Henbury</string>
 			</dict>
 ```
+
+开启启动出现苹果logo后，读取进度条进入第二段进度，黑屏一段时间然后直接进入登录界面
+通过OC为显卡注入CFG_LINK_FIXED_MAP属性，属性值可以尝试1/3/4数值，目前来看对绝大多数显卡都有效，但是此方法在4K高刷显示器下无效，因为白苹果也这样。
+如这里我注入的是1
   
 ### Kext说明
 - Lilu.kext  # 基础必备，很多kext都依赖于它
@@ -209,12 +148,12 @@ Intel UHD Graphics 630
 - IO80211FamilyLegacy.kext  # 配合OCLP在Sonoma下修复博通网卡问题
 - IOSkywalkFamily.kext  # 配合OCLP在Sonoma下修复博通网卡问题
 - LucyRTL8125Ethernet.kext  # Realtek 的 2.5Gb 的网卡驱动
-- RadeonSensor.kext  # 读取GPU温度所需，需要Lilu
-- SMCRadeonGPU.kext  # 可以选择用于将 GPU 温度导出到 VirtualSMC 以供监控工具读取
+- SMCRadeonSensors.kext  # 读取GPU温度导出到 VirtualSMC 以供监控工具，需要Lilu
 - USBPorts.kext  # USB定制
 - WhateverGreen.kext  # 显卡驱动
 - XHCI-unsupported.kext  # 配合解决 USB 问题的驱动，常用于400以上主板
-- dAGPM.kext # 配合SSDT-RX5700XT-Version1.0.aml优化 RX 5700XT 独显
+
+以前是用RadeonSensor.kext + SMCRadeonGPU.kext：读取GPU温度，现在这个项目已经归档，交由 [SMCRadeonSensors](https://github.com/ChefKissInc/SMCRadeonSensors) 
 
 ### 关于Mac序列号的问题
 - 下载 OpenCore Configurator for Mac，打开 PlatformInfo -> Model Lookup | Check Coverage 右侧选择 iMac20,1 机型（生成你的唯一硬件UUID），然后 Save as (另存为) config.plist
@@ -247,11 +186,6 @@ PS: 还可使用 Hackintool 工具（系统 -> 序列号生成器）来获取三
     </dict>
 
 ```
-
-
-### 声卡ID
-
-主板自带声卡为ALCS1200A,声卡ID可选为：1、2、3、7、49、50、51、52、69
 
 
 ### Win+Mac双系统解决Win系统时间时差问题
