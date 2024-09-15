@@ -4,7 +4,7 @@
 ⚠️** 如果使用我的配置，请自行替换三码。**
 
 ### 更新
-- 2024/09/15，基于OpenCore 1.0.1，macOS Sonoma 14.4.6
+- 2024/09/15，基于OpenCore 1.0.1，macOS Sonoma 14.6.1
 - 2024/09/15，为了测试macOS Sequoia， 更新Lilu.kext ANFIPass.kext IOSkywalkFamily.kext。添加启动参数 -lilubetaall 
 
 
