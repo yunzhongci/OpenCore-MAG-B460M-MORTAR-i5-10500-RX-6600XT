@@ -83,7 +83,7 @@ SSDT-PM，加载节能第五项（断电后自动重启生效，PC基本通用�
 ```
 #### PciRoot(0x0)/Pci(0x2,0x0)
 核显 Intel UHD Graphics 630
-不填写可能会导致VideoProc 中现实HEVC不支持。 
+不填写可能会导致VideoProc 中显示HEVC不支持。 
 ```xml
 <key>PciRoot(0x0)/Pci(0x2,0x0)</key>
 			<dict>
@@ -135,6 +135,7 @@ SSDT-PM，加载节能第五项（断电后自动重启生效，PC基本通用�
 
 开启启动出现苹果logo后，读取进度条进入第二段进度，黑屏一段时间然后直接进入登录界面
 通过OC为显卡注入CFG_LINK_FIXED_MAP属性，属性值可以尝试1/3/4数值，目前来看对绝大多数显卡都有效，但是此方法在4K高刷显示器下无效，因为白苹果也这样。
+
 如这里我注入的是1
   
 ### Kext说明
@@ -158,6 +159,7 @@ SSDT-PM，加载节能第五项（断电后自动重启生效，PC基本通用�
 ### 关于Mac序列号的问题
 - 下载 OpenCore Configurator for Mac，打开 PlatformInfo -> Model Lookup | Check Coverage 右侧选择 iMac20,1 机型（生成你的唯一硬件UUID），然后 Save as (另存为) config.plist
 - 在config.plist文件中找到如下代码，记录MLB、SystemSerialNumber和SystemUUID的值并记住它，更新EFI时，用你记录的值替换 /OC/config.plist 下对应的值即可
+  
 PS: 还可使用 Hackintool 工具（系统 -> 序列号生成器）来获取三码
 
 ```
