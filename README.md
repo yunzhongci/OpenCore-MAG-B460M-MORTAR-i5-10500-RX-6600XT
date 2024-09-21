@@ -52,20 +52,14 @@ IOPCIConfigurator::configure kIOPCIEnumerationWaitTime is 900
 ### 使用的SSDT
 - SSDT-AWAC
 - SSDT-EC-USBX-DESKTOP
-- SSDT-GPRW
 - SSDT-MSI-B460M-Devices
 - SSDT-PLUG
 - SSDT-PM
-- SSDT-SBUS
   
 #### 说明
 SSDT-AWAC、SSDT-PLUG、SSDT-EC-USBX-DESKTOP这三个为推荐添加的
 
-SSDT-GPRW修复睡眠即醒或者休眠问题，遇到问题可以添加
-
 SSDT-MSI-B460M-Devices，运行稳定且没有遇到以上问题，你可能不需要这个 SSDT 文件。但如果遇到设备识别、音频、USB、睡眠等问题可以添加
-
-SSDT-SBUS当主板的 SMBus 存在兼容性问题时，特别是某些电源管理相关的设备无法正确工作时添加
 
 SSDT-PM，加载节能第五项（断电后自动重启生效，PC基本通用的补丁）
 
@@ -154,6 +148,7 @@ SSDT-PM，加载节能第五项（断电后自动重启生效，PC基本通用�
 - USBPorts.kext  # USB定制
 - WhateverGreen.kext  # 显卡驱动
 - XHCI-unsupported.kext  # 配合解决 USB 问题的驱动，常用于400以上主板
+- HibernationFixup.kext  #解决休眠和唤醒过程中可能遇到的问题
 
 以前是用RadeonSensor.kext + SMCRadeonGPU.kext：读取GPU温度，现在这个项目已经归档，交由 [SMCRadeonSensors](https://github.com/ChefKissInc/SMCRadeonSensors) 
 
