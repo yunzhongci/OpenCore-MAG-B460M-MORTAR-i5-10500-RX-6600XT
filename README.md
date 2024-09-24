@@ -53,6 +53,7 @@ IOPCIConfigurator::configure kIOPCIEnumerationWaitTime is 900
 - SSDT-AWAC
 - SSDT-EC-USBX-DESKTOP
 - SSDT-MSI-B460M-Devices
+- SSDT-GPRW
 - SSDT-PLUG
 - SSDT-PM
   
@@ -60,6 +61,8 @@ IOPCIConfigurator::configure kIOPCIEnumerationWaitTime is 900
 SSDT-AWAC、SSDT-PLUG、SSDT-EC-USBX-DESKTOP这三个为推荐添加的
 
 SSDT-MSI-B460M-Devices，运行稳定且没有遇到以上问题，你可能不需要这个 SSDT 文件。但如果遇到设备识别、音频、USB、睡眠等问题可以添加
+
+SSDT-GPRW修复睡眠即醒或者休眠问题，遇到问题可以添加
 
 SSDT-PM，加载节能第五项（断电后自动重启生效，PC基本通用的补丁）
 
