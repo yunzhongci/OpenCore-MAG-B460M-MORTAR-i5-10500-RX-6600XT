@@ -8,6 +8,7 @@
 - 2024/09/15 为了测试macOS Sequoia， 更新Lilu.kext ANFIPass.kext IOSkywalkFamily.kext。添加启动参数 -lilubetaall 
 - 2024/09/18 更新到Sequoia 15.0 版本
 - 2024/10/29 更新 OpenCore 到 1.0.2，更新 相关kext，更新 MacOS Sequoia 到 15.1
+- 2024/12/04，更新OpenCore到1.0.3，更新相关kext到最新
 
 
 ### 硬件配置
