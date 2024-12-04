@@ -8,6 +8,7 @@
 - 2024/05/14，基于OpenCore 1.0.0，macOS Sonoma 14.5
 - 2024/09/09，更换显卡为蓝宝石RX 5700XT 8G白金版。之前的显卡RX580 4G的配置文件归档，不再更新
 - 2024/09/10，为了测试macOS Sequoia， 更新Lilu.kext ANFIPass.kext IOSkywalkFamily.kext。添加启动参数 -lilubetaall 
+- 2024/12/04，更新OpenCore到1.0.3，更新相关kext到最新
 
 
 ### 硬件配置
