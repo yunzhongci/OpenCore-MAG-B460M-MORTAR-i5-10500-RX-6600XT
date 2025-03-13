@@ -287,6 +287,8 @@
 			<false/>
 			<key>AvoidRuntimeDefrag</key>
 			<true/>
+			<key>ClearTaskSwitchBit</key>
+			<false/>
 			<key>DevirtualiseMmio</key>
 			<true/>
 			<key>DisableSingleUser</key>
@@ -362,17 +364,19 @@
 				<key>AAPL,slot-name</key>
 				<string>Slot-1</string>
 				<key>ATY,DeviceName</key>
-				<string>W6600X</string>
+				<string>AMD Radeon RX 6600 XT</string>
 				<key>ATY,EFIVersion</key>
 				<string>01.01.270</string>
 				<key>ATY,FamilyName</key>
-				<string>Radeon Pro</string>
+				<string>Radeon</string>
 				<key>CFG_LINK_FIXED_MAP</key>
 				<integer>1</integer>
 				<key>device_type</key>
 				<string>ATY,HenburyParent</string>
+				<key>enable-hdmi20</key>
+				<integer>1</integer>
 				<key>model</key>
-				<string>AMD Radeon RRO W6600X</string>
+				<string>AMD Radeon RX 6600 XT</string>
 				<key>name</key>
 				<string>ATY,Henbury</string>
 			</dict>
